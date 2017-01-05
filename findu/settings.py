@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'userzone',
+    'online',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,7 +57,7 @@ ROOT_URLCONF = 'findu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,8 +78,12 @@ WSGI_APPLICATION = 'findu.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'findudb',
+        'USER': 'root',
+        'PASSWORD': 'bdyun',
+        'HOST':'',
+        'PORT':'',
     }
 }
 
@@ -101,3 +106,56 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    '/home/Portal/myzone/Findu/findu/static',
+)
+
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+STATIC_ROOT = '/static/'
+LOG_PATH = '/var/log/uwsgi/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '{pid:%(process)d | module:%(pathname)s:%(lineno)d } [%(asctime)s] [%(levelname)s]  %(message)s'
+        },
+    },
+    'handlers': {
+        'authpuppy': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_PATH,'authpuppy.log'),
+            'maxBytes': 1024*1024*10, # 10 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },
+        'console': {
+            'level':'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+    },
+    'loggers': {
+        'django.request': {
+        'handlers': ['console', 'authpuppy'],
+        'level': 'DEBUG',
+    },
+        'authpuppy':{
+            'handlers': ['authpuppy'],
+            'level': 'INFO',
+            'propagate': True
+    },
+        'aaron.debug': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'console': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    },
+}

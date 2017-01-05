@@ -13,10 +13,16 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.template.context_processors import static
+from . import settings
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^userzone/', include('userzone.urls',namespace='userzone')),
+    url(r'^online/', include('online.urls',namespace='online')),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

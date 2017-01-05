@@ -17,5 +17,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 import  views
 urlpatterns = [
-    # url(r'^hello/', views.Hello,name='hello'),
+    url(r'^regist/', views.regist,name='regist'),
+    url(r'^login/', views.login,name='login'),
+    url(r'^index/', views.index,name='index'),
+    url(r'^logout/', views.logout,name='logout'),
 ]
